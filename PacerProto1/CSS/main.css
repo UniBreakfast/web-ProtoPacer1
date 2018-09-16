@@ -1,3 +1,56 @@
+.btn-mainmenu {
+	background: lightgrey;
+	grid-area: button1;
+}
+.cont-user-info {
+	background: lime;
+	grid-area: userinfo;
+}
+.btn-sidebar {
+	display: none;
+	background: lightgrey;
+	grid-area: button2;
+}
+.cont-table {
+/* 	background: LemonChiffon; */
+	grid-area: table;
+}
+.cont-sidebar {
+	background: lightgrey;
+	grid-area: sidebar;
+}
+html, body {height: 100%; margin: 0; overflow: hidden}
+body { font: 16px/30px "Trebuchet MS" }
 body {
-  background: #deface;
+	padding: 10px;
+	box-sizing: border-box;
+	display: grid;
+	grid-gap: 10px;
+	grid-template-columns: 60px 1fr 240px;
+	grid-template-rows: 60px minmax(0, 1fr);
+	grid-template-areas:
+		"button1 userinfo sidebar"
+		 "table   table   sidebar";
+}
+
+@media only screen and (max-width: 640px)  {
+	body {
+		grid-template-columns: 60px 1fr 60px;
+		grid-template-rows: 60px minmax(0, 1fr);
+		grid-template-areas:
+			"button1 userinfo button2"
+			 "table   table    table";
+	}
+	.cont-sidebar {
+		display: none;
+		position: absolute;
+		top: 0; right: 0;
+		border: solid white 10px;
+		box-sizing: border-box;
+		width: 260px;
+		height: 100%;
+	}
+	.btn-sidebar {
+		display: block;
+	}
 }
