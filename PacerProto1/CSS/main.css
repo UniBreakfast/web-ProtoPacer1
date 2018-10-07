@@ -1,24 +1,3 @@
-.btn-mainmenu {
-	background: lightgrey;
-	grid-area: button1;
-}
-.cont-user-info {
-	background: lime;
-	grid-area: userinfo;
-}
-.btn-sidebar {
-	display: none;
-	background: lightgrey;
-	grid-area: button2;
-}
-.cont-table {
-/* 	background: LemonChiffon; */
-	grid-area: table;
-}
-.cont-sidebar {
-	background: lightgrey;
-	grid-area: sidebar;
-}
 html, body {height: 100%; margin: 0; overflow: hidden}
 body { font: 16px/30px "Trebuchet MS" }
 body {
@@ -53,4 +32,26 @@ body {
 	.btn-sidebar {
 		display: block;
 	}
+}
+
+.btn-mainmenu {
+	background: lightgrey;
+	grid-area: button1;
+}
+.cont-user-info {
+	background: lime;
+	grid-area: userinfo;
+}
+.btn-sidebar {
+	display: none;
+	background: lightgrey;
+	grid-area: button2;
+}
+.cont-table {
+/* 	background: LemonChiffon; */
+	grid-area: table;
+}
+.cont-sidebar {
+	background: lightgrey;
+	grid-area: sidebar;
 }
