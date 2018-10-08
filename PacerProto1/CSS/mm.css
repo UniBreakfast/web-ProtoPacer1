@@ -1,0 +1,10 @@
+body {
+  max-height: 100vh;
+  background: brown;
+}
+
+#mm-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
