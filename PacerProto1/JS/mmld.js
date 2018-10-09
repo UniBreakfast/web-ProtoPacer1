@@ -1,5 +1,7 @@
 const mmld = function main_menu_load_data() {
-  alert('mmld loaded and executed');
+  var user_id = f.APIcookie.get('user').split('|')[0];
+
+
 }
 
 mmld();
