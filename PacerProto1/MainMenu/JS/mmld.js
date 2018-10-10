@@ -6,7 +6,7 @@ const mmld = function main_menu_load_data() {
       document.getElementById('user')      .innerHTML = login;
       document.getElementById('confidence').innerHTML = confidence;
     }
-    f.POST('PHP/get.php?userid='+user_id, place_ud, alert);
+    f.POST('MainMenu/PHP/mmld.php?userid='+user_id, place_ud, alert);
   }
 }
 
