@@ -1,0 +1,1 @@
+var mainpage = 'mainmenu.htm';
