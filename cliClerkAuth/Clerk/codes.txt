@@ -1,0 +1,144 @@
+SingUp() ///////////////////////////////////////////////////////////////////////
+
+100
+SUCCESS
+User $login is registered!
+
+101
+FAIL
+Login $login already occupied
+
+102
+ERROR
+Not enough credentials to register!
+
+SignIn() ///////////////////////////////////////////////////////////////////////
+
+103
+SUCCESS
+You are signed in now as $login!
+
+104
+FAIL
+Can't sign in. Incorrect password!
+
+105
+FAIL
+Can't sign in. User $login not found!
+
+106
+ERROR
+Not enough credentials to sign in!
+
+isSignedIn() ///////////////////////////////////////////////////////////////////
+
+107
+INFO
+Session confirmed, you are signed in
+
+108
+INFO
+No such session in act
+
+109
+FAIL
+No complete session cookie found
+
+110
+ERROR
+No complete session cookie provided
+
+SignOut() //////////////////////////////////////////////////////////////////////
+
+111
+SUCCESS
+Signed out
+
+112
+ERROR
+No complete session cookie provided
+
+113
+INFO
+You are not signed in!
+
+Abandon() //////////////////////////////////////////////////////////////////////
+
+126
+SUCCESS
+Session cookies - no more!
+
+ChangePassword() ///////////////////////////////////////////////////////////////
+
+114
+SUCCESS
+Password changed for user $login
+
+115
+FAIL
+Can't change password. Incorrect password!
+
+116
+FAIL
+Can't change password. No user $login found!
+
+117
+ERROR
+Not enough credentials to change password!
+
+ChangeLogin() //////////////////////////////////////////////////////////////////
+
+118
+SUCCESS
+Login changed from $oldlogin to $newlogin
+
+119
+FAIL
+Can't change login. Incorrect password!
+
+120
+FAIL
+Can't change login. No user $oldlogin found!
+
+121
+ERROR
+Not enough credentials to change login!
+
+UnRegister() ///////////////////////////////////////////////////////////////////
+
+122
+SUCCESS
+User $login removed!
+
+123
+FAIL
+Can't unregister. Incorrect password!
+
+124
+FAIL
+Can't unregister. No user with login $login found!
+
+125
+ERROR
+Not enough credentials to unregister!
+
+getData() //////////////////////////////////////////////////////////////////////
+
+127
+SUCCESS
+$rows records of $columns fields delivered
+
+128
+SUCCESS
+Query returned no data
+
+129
+FAIL
+No table $table available
+
+130
+FAIL
+Field(s) $wrong are not available in the $table table
+
+////////////////////////////////////////////////////////////////////////////////
+
