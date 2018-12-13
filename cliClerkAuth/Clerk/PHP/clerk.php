@@ -21,6 +21,25 @@ function Response($code, $type, $text, $data=null) {
   return $response;
 }
 
+function creds_check() {
+  list ($userid, $token) = f::request('userid', 'token');
+  if ($userid and $token) {
+    global $db, $tblSessions, $sessExpire;
+    $q = "SELECT id, bfp_hash FROM $tblSessions WHERE user_id = ?
+      AND token = ? AND dt_modify > NOW() - INTERVAL $sessExpire DAY";
+    $p = qp($userid,'i', $token,'s');
+    if (list ($id, $bfp) = f::getRecord($db, $q, $p) and bfpCheck($bfp)) {
+      $token = randStr();
+      $q = "UPDATE $tblSessions SET token = '$token' WHERE id = $id";
+      f::execute($db, $q);
+      $data['token' ] = $token;
+      $data['expire'] = $sessExpire;
+    } else $userid = false;
+  }
+  else $data = array();
+  return array($userid, $data);
+}
+
 switch ($_REQUEST['task']) {
 
   case 'reg': {
@@ -172,21 +191,56 @@ switch ($_REQUEST['task']) {
   } break;
 
   case 'get': {
-    list ($userid, $token) = f::request('userid', 'token');
-    if ($userid and $token) {
-      $q = "SELECT id, bfp_hash FROM $tblSessions WHERE user_id = ?
-      AND token = ? AND dt_modify > NOW() - INTERVAL $sessExpire DAY";
-      $p = qp($userid,'i', $token,'s');
-      if (list ($id, $bfp) = f::getRecord($db, $q, $p) and bfpCheck($bfp)) {
-        $token = randStr();
-        $q = "UPDATE $tblSessions SET token = '$token' WHERE id = $id";
-        f::execute($db, $q);
-        $data['token' ] = $token;
-        $data['expire'] = $sessExpire;
-      } else $userid = false;
-    }
+    list ($userid, $data) = creds_check();
+
     list ($table, $fields, $ownOnly) = f::request('table', 'fields', 'own');
     if ($fields) $fields = json_decode($fields);
+
+    if (!$userid) {
+      if (!isset($freeAccess[$table])) exit
+        (json_encode(Response(129, 'F', "No table $table available")));
+      if ($wrong = implode(array_diff($fields, $freeAccess[$table]), ', '))
+        exit (json_encode(Response(130, 'F',
+                     "Field(s) $wrong are not available in the $table table")));
+      $ownOnly = false;
+    }
+    else {
+      $freeAccess = array_merge_recursive($freeAccess, $userAccess);
+      $privAccess = array_merge_recursive($freeAccess, $privAccess);
+      if ($ownOnly  or !isset($freeAccess[$table]) or
+          array_diff($fields, $freeAccess[$table])) {
+        if (!isset($privAccess[$table])) exit
+          (json_encode(Response(129, 'F', "No table $table available", $data)));
+        if ($wrong = implode(array_diff($fields, $privAccess[$table]), ', '))
+          exit (json_encode(Response(130, 'F',
+              "Field(s) $wrong are not available in the $table table", $data)));
+        $ownOnly = true;
+      }
+    }
+
+    if (!$fields) $fields = $ownOnly? $privAccess[$table] : $freeAccess[$table];
+    $data['headers'] = $fields;
+    $fields = implode($fields, ', ');
+
+    $q = "SELECT $fields FROM $table WHERE 1";
+    if ($ownOnly) {
+      if ($table != $tblUsers) $q .= " AND user_id = $userid";
+      else                     $q .= " AND      id = $userid";
+    }
+    $data['rows'] = f::getRecords($db, $q);
+    if ($rows = sizeof($data['rows']) and $columns = sizeof($data['headers']))
+      echo json_encode(Response(127, 'S',
+                          "$rows records of $columns fields delivered", $data));
+    else echo json_encode(Response(128, 'S', "Query returned no data", $data));
+  } break;
+
+  case 'list': {
+    list ($userid, $data) = creds_check();
+
+    list ($ownOnly, $table) = f::request('own', 'table');
+    $ownOnly = $userid ? $ownOnly : 0;
+
+////////////////////////////////////////////////////////////////////////////////
 
     if (!$userid) {
       if (!isset($freeAccess[$table])) exit
@@ -223,7 +277,7 @@ switch ($_REQUEST['task']) {
     if ($rows = sizeof($data['rows']) and $columns = sizeof($data['headers']))
       echo json_encode(Response(127, 'S',
                           "$rows records of $columns fields delivered", $data));
-    else echo json_encode(Response(128, 'S', "Query returned no data"));
+    else echo json_encode(Response(128, 'S', "Query returned no data", $data));
   } break;
 
   default: {}

@@ -109,10 +109,30 @@ const clerk = (()=>{
     }, log);
   }
 
+  function accessList(own, table) {
+    if (own === undefined) own = 2;
+    else own = own ? 1 : 0;
+    const userid = f.cookie.get('userid'), token = f.cookie.get('token');
+    let creds = (userid && token) ?
+        '&userid='+userid+'&token='+token+'&own='+own : '';
+    table = table || '';
+    f.POST(clerk_php+'?task=list'+creds+'&table='+table, response => {
+      response = JSON.parse(response);      let d;
+      if (d = response.data) {
+        if (d.token) {
+          f.cookie.set('userid', userid,  d.expire);
+          f.cookie.set('token',  d.token, d.expire);
+        }
+        if (d.list) log(d.list);
+      }
+      else if (drop_sess_on_deny) abandon(1);
+      log(response);
+    }, log);  }
+
   const clerk = {setPath,
                  SignUp, SignIn, isSignedIn, SignOut, abandon,
                  ChangePassword, ChangeLogin, UnRegister,
-                 getData}
+                 accessList, getData}
 
   return clerk;
 })();
