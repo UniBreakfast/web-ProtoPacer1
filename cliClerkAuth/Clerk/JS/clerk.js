@@ -38,7 +38,7 @@ const clerk = (()=>{
 
   //function TypicalTask(arg1, arg2) {
   //  function func(cb) {
-  //    setTimeout(()=>{log(arg1+' '+arg2); cb()}, 4000);
+  //    setTimeout(()=>{log(arg1+' '+arg2); cb()}, 8000);
   //  }
   //  add_task(func);
   //}
