@@ -140,5 +140,17 @@ No table $table available
 FAIL
 Field(s) $wrong are not available in the $table table
 
-////////////////////////////////////////////////////////////////////////////////
+accessList() ///////////////////////////////////////////////////////////////////
+
+131
+SUCCESS
+$fields field(s) available in the table $table
+
+132
+SUCCESS
+$tables table(s) available
+
+133
+FAIL
+No table $table available
 

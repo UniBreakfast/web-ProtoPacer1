@@ -110,7 +110,7 @@ const clerk = (()=>{
   }
 
   function accessList(own, table) {
-    if (own === undefined) own = 2;
+    if (own === undefined || own > 1) own = 2;
     else own = own ? 1 : 0;
     const userid = f.cookie.get('userid'), token = f.cookie.get('token');
     let creds = (userid && token) ?

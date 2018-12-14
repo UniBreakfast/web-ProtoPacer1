@@ -237,47 +237,87 @@ switch ($_REQUEST['task']) {
   case 'list': {
     list ($userid, $data) = creds_check();
 
-    list ($ownOnly, $table) = f::request('own', 'table');
-    $ownOnly = $userid ? $ownOnly : 0;
-
-////////////////////////////////////////////////////////////////////////////////
+    list ($own, $table) = f::request('own', 'table');
+    $own = $userid ? $own : 0;
 
     if (!$userid) {
-      if (!isset($freeAccess[$table])) exit
-        (json_encode(Response(129, 'F', "No table $table available")));
-      if ($wrong = implode(array_diff($fields, $freeAccess[$table]), ', '))
-        exit (json_encode(Response(130, 'F',
-                     "Field(s) $wrong are not available in the $table table")));
-      $ownOnly = false;
-    }
-    else {
-      $freeAccess = array_merge_recursive($freeAccess, $userAccess);
-      $privAccess = array_merge_recursive($freeAccess, $privAccess);
-      if ($ownOnly  or !isset($freeAccess[$table]) or
-          array_diff($fields, $freeAccess[$table])) {
-        if (!isset($privAccess[$table])) exit
-          (json_encode(Response(129, 'F', "No table $table available")));
-        if ($wrong = implode(array_diff($fields, $privAccess[$table]), ', '))
-          exit (json_encode(Response(130, 'F',
-                     "Field(s) $wrong are not available in the $table table")));
-        $ownOnly = true;
+      if ($table) {
+        if (isset($freeAccess[$table])) {
+          $data['list'] = $freeAccess[$table];
+          $fields = sizeof($freeAccess[$table]);
+          exit (json_encode(Response(131, 'S',
+                     "$fields field(s) available in the table $table", $data)));
+        }
+        else exit (json_encode(Response(133,'F', "No table $table available")));
+      }
+      else {
+        $data['list'] = $freeAccess;
+        $tables = sizeof($freeAccess);
+        exit
+          (json_encode(Response(132,'S', "$tables table(s) available", $data)));
       }
     }
 
-    if (!$fields) $fields = $ownOnly? $privAccess[$table] : $freeAccess[$table];
-    $data['headers'] = $fields;
-    $fields = implode($fields, ', ');
+    $freeAccess = array_merge_recursive($freeAccess, $userAccess);
+    $privAccess = array_merge_recursive($freeAccess, $privAccess);
 
-    $q = "SELECT $fields FROM $table WHERE 1";
-    if ($ownOnly) {
-      if ($table != $tblUsers) $q .= " AND user_id = $userid";
-      else                     $q .= " AND      id = $userid";
+    if (!$own) {
+      if ($table) {
+        if (isset($freeAccess[$table])) {
+          $data['list'] = $freeAccess[$table];
+          $fields = sizeof($freeAccess[$table]);
+          exit (json_encode(Response(131, 'S',
+                     "$fields field(s) available in the table $table", $data)));
+        }
+        else exit
+          (json_encode(Response(133, 'F', "No table $table available", $data)));
+      }
+      else {
+        $data['list'] = $freeAccess;
+        $tables = sizeof($freeAccess);
+        exit
+          (json_encode(Response(132,'S', "$tables table(s) available", $data)));
+      }
     }
-    $data['rows'] = f::getRecords($db, $q);
-    if ($rows = sizeof($data['rows']) and $columns = sizeof($data['headers']))
-      echo json_encode(Response(127, 'S',
-                          "$rows records of $columns fields delivered", $data));
-    else echo json_encode(Response(128, 'S', "Query returned no data", $data));
+    elseif ($own === '1') {
+      if ($table) {
+        if (isset($privAccess[$table])) {
+          $data['list'] = $privAccess[$table];
+          $fields = sizeof($privAccess[$table]);
+          exit (json_encode(Response(131, 'S',
+                     "$fields field(s) available in the table $table", $data)));
+        }
+        else exit
+            (json_encode(Response(133,'F',"No table $table available", $data)));
+      }
+      else {
+        $data['list'] = $privAccess;
+        $tables = sizeof($privAccess);
+        exit
+          (json_encode(Response(132,'S', "$tables table(s) available", $data)));
+      }
+    }
+    else {
+      if ($table) {
+        if (isset($freeAccess[$table]))
+          $data['list']['user'] = $freeAccess[$table];
+        if (isset($privAccess[$table])) {
+          $data['list']['own' ] = $privAccess[$table];
+          $fields = sizeof($privAccess[$table]);
+          exit (json_encode(Response(131, 'S',
+                     "$fields field(s) available in the table $table", $data)));
+        }
+        else exit
+          (json_encode(Response(133,'F',"No table $table available", $data)));
+      }
+      else {
+        $data['list']['user'] = $freeAccess;
+        $data['list']['own' ] = $privAccess;
+        $tables = sizeof($privAccess);
+        exit
+          (json_encode(Response(132,'S', "$tables table(s) available", $data)));
+      }
+    }
   } break;
 
   default: {}
