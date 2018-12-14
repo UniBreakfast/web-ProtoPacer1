@@ -261,7 +261,7 @@ switch ($_REQUEST['task']) {
     $freeAccess = array_merge_recursive($freeAccess, $userAccess);
     $privAccess = array_merge_recursive($freeAccess, $privAccess);
 
-    if (!$own) {
+    if (!$own) { sleep(3);
       if ($table) {
         if (isset($freeAccess[$table])) {
           $data['list'] = $freeAccess[$table];
@@ -279,7 +279,7 @@ switch ($_REQUEST['task']) {
           (json_encode(Response(132,'S', "$tables table(s) available", $data)));
       }
     }
-    elseif ($own === '1') {
+    elseif ($own == 1) {
       if ($table) {
         if (isset($privAccess[$table])) {
           $data['list'] = $privAccess[$table];
