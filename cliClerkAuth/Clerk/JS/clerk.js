@@ -246,6 +246,42 @@ const clerk = (()=>{
     add_task(do_accessList);
   }
 
+/*
+  function template(required1, required2, optional=0) {
+    function do_template(cb_next_task) {
+      if (required1 && required2) {
+        const userid = f.cookie.get('userid'), token = f.cookie.get('token');
+        let creds = (userid && token) ?
+            '&userid='+userid+'&token='+token : '';
+        f.POST(clerk_php+'?task=template'+'&required1='+required1+'&required2='+
+               JSON.stringify(required2)+creds, response => {
+          response = JSON.parse(response);      let d;
+          if (d = response.data) {
+            if (d.token) {
+              f.cookie.set('userid', userid,  d.expire);
+              f.cookie.set('token',  d.token, d.expire);
+            }
+            if (d.headers) {
+              log(d.headers);
+              log(d.rows);
+            }
+          }
+          else if (drop_sess_on_deny) abandon(1);
+          log(response);
+          cb_next_task();
+        }, log);
+      }
+      else {
+        log(new Response(000, 'E',
+                       'No required argument provided to do a template task'));
+        cb_next_task();
+      }
+    }
+
+    add_task(do_template);
+  }
+*/
+
   const clerk = {setPath,
                  SignUp, SignIn, isSignedIn, SignOut, abandon,
                  ChangePassword, ChangeLogin, UnRegister,
