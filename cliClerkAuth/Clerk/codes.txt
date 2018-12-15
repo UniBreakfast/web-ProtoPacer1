@@ -12,6 +12,10 @@ Login $login already occupied
 ERROR
 Not enough credentials to register!
 
+135
+ERROR
+Invalid login input: $check
+
 SignIn() ///////////////////////////////////////////////////////////////////////
 
 103
@@ -159,4 +163,4 @@ FAIL
 No table $table available
 
 
-135!
+136!

@@ -18,24 +18,24 @@ class f
   private static function _query($query, $db, $params) {
     $stmt = mysqli_stmt_init($db);
     $q = f::_acronym($query);
-    if (mysqli_stmt_prepare($stmt, $query)) {
-      foreach($params as &$param) {
-        $param_types .= $param[1];
-        $p_binds[]   = &$param[0];
-      }
-      array_unshift($p_binds, $stmt, $param_types);
-      call_user_func_array('mysqli_stmt_bind_param', $p_binds);
-      mysqli_stmt_execute($stmt) or exit("$q Query failed!");
+    if (!mysqli_stmt_prepare($stmt, $query)) exit("$q Statement failed!");
 
-      for ($i = 0; $i < mysqli_stmt_field_count($stmt); $i++)
-        $r_binds[] = &$row[$i];
-      array_unshift($r_binds, $stmt);
-      call_user_func_array('mysqli_stmt_bind_result', $r_binds);
-      while (mysqli_stmt_fetch($stmt))
-        $result[] = array_map(function($field) { return $field; }, $row);
-      mysqli_stmt_close($stmt);
-      return array($q, $result);
-    } else exit("$q Query failed!");
+    foreach($params as &$param) {
+      $param_types .= $param[1];
+      $p_binds[]   = &$param[0];
+    }
+    array_unshift($p_binds, $stmt, $param_types);
+    call_user_func_array('mysqli_stmt_bind_param', $p_binds);
+    mysqli_stmt_execute($stmt) or exit("$q Query failed!");
+
+    for ($i = 0; $i < mysqli_stmt_field_count($stmt); $i++)
+      $r_binds[] = &$row[$i];
+    array_unshift($r_binds, $stmt);
+    call_user_func_array('mysqli_stmt_bind_result', $r_binds);
+    while (mysqli_stmt_fetch($stmt))
+      $result[] = array_map(function($field) { return $field; }, $row);
+    mysqli_stmt_close($stmt);
+    return array($q, $result);
   }
 
   # adds a record and returns id of inserted record afterwards
@@ -107,6 +107,28 @@ class f
       else break;
     }
     if ($values) return $values;
+  }
+
+  # checks string for validity to a certain schema
+  static function strCheck($str, $min=1, $max=0, $schema=0) {
+    if (!is_string($str)) return 'not a string';
+    if ($min and mb_strlen($str)<$min)
+      return "string is too short, minimum is $min characters";
+    if ($max and mb_strlen($str)>$max)
+      return "string is too long, maximum is $max characters";
+    if ($schema) {
+      switch ($schema) {
+        case 1:
+        case "ERU-1": {
+          $schema = "/[^A-Za-zА-Яа-яр-уЁёЇїІіЄєҐґ0-9’'\- ]/";
+          if (preg_match($schema, $str))
+            return "allowed only english, russian, ukrainian letter, ', -, "
+                  ."numbers and NO spaces!";
+        } break;
+        default: {}
+      }
+    }
+    //return 'check passed!'; // expected null by default
   }
 }
 
