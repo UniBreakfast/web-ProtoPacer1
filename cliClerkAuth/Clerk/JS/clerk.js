@@ -58,7 +58,8 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=reg'+'&login='+login+'&pass='+pass,
                   response => {
-        log(JSON.parse(response));
+        try { response = JSON.parse(response) } catch (e){}
+        log(response);
         cb_next_task();
       }, log);
     }
@@ -74,7 +75,8 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=login'+'&login='+login+'&pass='+pass,
                   response => {
-        response = JSON.parse(response);      let d;
+        try { response = JSON.parse(response) } catch (e){}
+        let d;
         if (d = response.data) {
           f.cookie.set('userid', d.userid, d.expire);
           f.cookie.set('token',  d.token,  d.expire);
@@ -96,7 +98,8 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=check'+'&userid='+userid+'&token='+token,
                   response => {
-        response = JSON.parse(response);      let d;
+        try { response = JSON.parse(response) } catch (e){}
+        let d;
         if (d = response.data) {
           f.cookie.set('userid', userid,  d.expire);
           f.cookie.set('token',  d.token, d.expire);
@@ -145,7 +148,8 @@ const clerk = (()=>{
       else f.POST(clerk_php+'?task=newpass'+
                   '&login='+login+'&oldpass='+oldpass+'&newpass='+newpass,
                   response => {
-        log(JSON.parse(response));
+        try { response = JSON.parse(response) } catch (e){}
+        log(response);
         cb_next_task();
       }, log);
     }
@@ -162,7 +166,8 @@ const clerk = (()=>{
       else f.POST(clerk_php+'?task=rename'+
                   '&oldlogin='+oldlogin+'&pass='+pass+'&newlogin='+newlogin,
                   response => {
-        log(JSON.parse(response));
+        try { response = JSON.parse(response) } catch (e){}
+        log(response);
         cb_next_task();
       }, log);
     }
@@ -178,7 +183,8 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=unreg'+'&login='+login+'&pass='+pass,
                   response => {
-        log(JSON.parse(response));
+        try { response = JSON.parse(response) } catch (e){}
+        log(response);
         cb_next_task();
       }, log);
     }
@@ -199,7 +205,8 @@ const clerk = (()=>{
 
         f.POST(clerk_php+'?task=get'+'&table='+table+'&fields='+
                JSON.stringify(fields)+creds, response => {
-          response = JSON.parse(response);      let d;
+          try { response = JSON.parse(response) } catch (e){}
+          let d;
           if (d = response.data) {
             if (d.token) {
               f.cookie.set('userid', userid,  d.expire);
@@ -231,7 +238,8 @@ const clerk = (()=>{
           '&userid='+userid+'&token='+token+'&own='+own : '';
 
       f.POST(clerk_php+'?task=list'+creds+'&table='+table, response => {
-        response = JSON.parse(response);      let d;
+        try { response = JSON.parse(response) } catch (e){}
+        let d;
         if (d = response.data) {
           if (d.token) {
             f.cookie.set('userid', userid,  d.expire);

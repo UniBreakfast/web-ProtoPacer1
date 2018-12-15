@@ -5,6 +5,7 @@ class f
 {
   # shortens the query for obscurity
   private static function _acronym($string) {
+    $string = preg_replace('/\s+/', ' ', $string);
     $words = explode(' ', $string);
     $acronym = '"';
     foreach ($words as $word) {
