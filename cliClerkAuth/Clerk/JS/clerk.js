@@ -50,6 +50,17 @@ const clerk = (()=>{
   //  add_task(func);
   //}
 
+  function upd_cred_cookie(d, userid) {
+    f.cookie.set('userid', userid || d.userid, d.expire);
+    f.cookie.set('token',  d.token,  d.expire);
+  }
+
+  function abandon(silent) {
+    f.cookie.remove('userid');
+    f.cookie.remove('token');
+    if (!silent) log(new Response(126, 'S', 'Session cookies - no more!'));
+  }
+
   function SignUp(login, pass) {
     function do_SignUp(cb_next_task) {
       if (!login || !pass) {
@@ -77,10 +88,7 @@ const clerk = (()=>{
                   response => {
         try { response = JSON.parse(response) } catch (e){}
         let d;
-        if (d = response.data) {
-          f.cookie.set('userid', d.userid, d.expire);
-          f.cookie.set('token',  d.token,  d.expire);
-        }
+        if (d = response.data) upd_cred_cookie(d);
         log(response);
         cb_next_task();
       }, log);
@@ -100,10 +108,7 @@ const clerk = (()=>{
                   response => {
         try { response = JSON.parse(response) } catch (e){}
         let d;
-        if (d = response.data) {
-          f.cookie.set('userid', userid,  d.expire);
-          f.cookie.set('token',  d.token, d.expire);
-        }
+        if (d = response.data) upd_cred_cookie(d, userid);
         else if (drop_sess_on_deny) abandon(1);
         log(response);
         cb_next_task();
@@ -123,20 +128,13 @@ const clerk = (()=>{
       else {
         f.POST(clerk_php+'?task=logout'+'&userid='+userid+'&token='+token, 0,
                log);
-        f.cookie.remove('userid');
-        f.cookie.remove('token');
+        abandon(1);
         log(new Response(111, 'S', 'Signed out'));
         cb_next_task();
       }
     }
 
     add_task(do_SignOut);
-  }
-
-  function abandon(silent) {
-    f.cookie.remove('userid');
-    f.cookie.remove('token');
-    if (!silent) log(new Response(126, 'S', 'Session cookies - no more!'));
   }
 
   function ChangePassword(login, oldpass, newpass) {
@@ -208,10 +206,7 @@ const clerk = (()=>{
           try { response = JSON.parse(response) } catch (e){}
           let d;
           if (d = response.data) {
-            if (d.token) {
-              f.cookie.set('userid', userid,  d.expire);
-              f.cookie.set('token',  d.token, d.expire);
-            }
+            if (d.token) upd_cred_cookie(d, userid);
             if (d.headers) {
               log(d.headers);
               log(d.rows);
@@ -241,10 +236,7 @@ const clerk = (()=>{
         try { response = JSON.parse(response) } catch (e){}
         let d;
         if (d = response.data) {
-          if (d.token) {
-            f.cookie.set('userid', userid,  d.expire);
-            f.cookie.set('token',  d.token, d.expire);
-          }
+          if (d.token) upd_cred_cookie(d, userid);
           if (d.list) log(d.list);
         }
         else if (drop_sess_on_deny) abandon(1);
