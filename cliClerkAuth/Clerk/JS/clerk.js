@@ -69,7 +69,7 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=reg'+'&login='+login+'&pass='+pass,
                   response => {
-        try { response = JSON.parse(response) } catch (e){}
+        response = JSON.tryparse(response);
         log(response);
         cb_next_task();
       }, log);
@@ -86,7 +86,7 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=login'+'&login='+login+'&pass='+pass,
                   response => {
-        try { response = JSON.parse(response) } catch (e){}
+        response = JSON.tryparse(response);
         let d;
         if (d = response.data) upd_cred_cookie(d);
         log(response);
@@ -106,7 +106,7 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=check'+'&userid='+userid+'&token='+token,
                   response => {
-        try { response = JSON.parse(response) } catch (e){}
+        response = JSON.tryparse(response);
         let d;
         if (d = response.data) upd_cred_cookie(d, userid);
         else if (drop_sess_on_deny) abandon(1);
@@ -146,7 +146,7 @@ const clerk = (()=>{
       else f.POST(clerk_php+'?task=newpass'+
                   '&login='+login+'&oldpass='+oldpass+'&newpass='+newpass,
                   response => {
-        try { response = JSON.parse(response) } catch (e){}
+        response = JSON.tryparse(response);
         log(response);
         cb_next_task();
       }, log);
@@ -164,7 +164,7 @@ const clerk = (()=>{
       else f.POST(clerk_php+'?task=rename'+
                   '&oldlogin='+oldlogin+'&pass='+pass+'&newlogin='+newlogin,
                   response => {
-        try { response = JSON.parse(response) } catch (e){}
+        response = JSON.tryparse(response);
         log(response);
         cb_next_task();
       }, log);
@@ -181,7 +181,7 @@ const clerk = (()=>{
       }
       else f.POST(clerk_php+'?task=unreg'+'&login='+login+'&pass='+pass,
                   response => {
-        try { response = JSON.parse(response) } catch (e){}
+        response = JSON.tryparse(response);
         log(response);
         cb_next_task();
       }, log);
@@ -203,7 +203,7 @@ const clerk = (()=>{
 
         f.POST(clerk_php+'?task=get'+'&table='+table+'&fields='+
                JSON.stringify(fields)+creds, response => {
-          try { response = JSON.parse(response) } catch (e){}
+          response = JSON.tryparse(response);
           let d;
           if (d = response.data) {
             if (d.token) upd_cred_cookie(d, userid);
@@ -233,11 +233,11 @@ const clerk = (()=>{
           '&userid='+userid+'&token='+token+'&own='+own : '';
 
       f.POST(clerk_php+'?task=list'+creds+'&table='+table, response => {
-        try { response = JSON.parse(response) } catch (e){}
+        response = JSON.tryparse(response);
         let d;
         if (d = response.data) {
           if (d.token) upd_cred_cookie(d, userid);
-          if (d.list) log(d.list);
+          if (d.list ) log(d.list);
         }
         else if (drop_sess_on_deny) abandon(1);
         log(response);

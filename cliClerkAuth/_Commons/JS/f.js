@@ -56,3 +56,8 @@ function log(subj) {
   if (subj.msg) console.log(subj.msg.type+' '+subj.msg.code+': '+subj.msg.text);
   else console.log(subj);
 }
+
+JSON.tryparse = str => {
+  try { return JSON.parse(str) }
+  catch (e) { return str }
+}

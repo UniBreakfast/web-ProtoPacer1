@@ -10,6 +10,7 @@
 
   <script src=Clerk/JS/clerkvars.js> </script>
   <script src=Clerk/JS/clerk.js>     </script>
+<script src=cloning.js></script>
 
 
 </head>
@@ -21,9 +22,31 @@
     </h2>
   </center>
 
+
+
   <script>
+    function mySubmit() {
+      console.log(window.document.forms[0].elements.login.value);
+      return false;
+    }
 
+    function addSignInForm(container, formobj, id, cls) {
+      f.GET('_Components/FormSignIn/signin.htm', htm => {
+        if (id)  htm = htm.replace('<form ', `<form id=   "${id}" ` );
+        if (cls) htm = htm.replace('<form ', `<form class="${cls}" `);
+        if (typeof container == 'string')
+          container = document.querySelector(container);
+        container.innerHTML += htm;
 
+        if (formobj) {
+          if (typeof formobj == 'string') formobj = window[formobj] = {}
+////////////////////////////////////////////////////////////////////////////////
+
+        }
+      }, log);
+    }
+
+    addSignInForm(document.body);
 
 
 
