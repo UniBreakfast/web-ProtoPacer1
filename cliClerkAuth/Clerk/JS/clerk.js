@@ -78,10 +78,10 @@ const clerk = (()=>{
     add_task(do_SignUp);
   }
 
-  function SignIn(login, pass) {
+  function SignIn(login, pass, func) {
     function do_SignIn(cb_next_task) {
       if (!login || !pass) {
-        log(new Response(106, 'E', 'Not enough credentials to sign in!'));
+        log(new Response(106, 'E', 'Not enough credentials to sign in!'), func);
         cb_next_task();
       }
       else f.POST(clerk_php+'?task=login'+'&login='+login+'&pass='+pass,
@@ -89,9 +89,9 @@ const clerk = (()=>{
         response = JSON.tryparse(response);
         let d;
         if (d = response.data) upd_cred_cookie(d);
-        log(response);
+        log(response, func);
         cb_next_task();
-      }, log);
+      }, log(func));
     }
 
     add_task(do_SignIn);

@@ -3,8 +3,9 @@
 // functions container object for common functions I use
 const f = {
   // aliases
-  byID:  document.getElementById.bind(document),
-  newEl: document.createElement .bind(document),
+  byID : document.getElementById        .bind(document),
+  byCls: document.getElementsByClassName.bind(document),
+  newEl: document.createElement         .bind(document),
 
   // to request do f.request(type, url, callback, reportcb, falldata, fallcb)
   request: function request(type, url, callback, reportcb, falldata, fallcb) {
@@ -32,8 +33,14 @@ const f = {
     request.ontimeout =
       () => reportcb(type + ' request to '+ url + ' timed out!');
     request.send();
-  }
+  },
 
+  str_to_style: (css, id) => {
+    var style = f.newEl('style');
+    style.textContent = css;
+    if (id) style.id = id;
+    document.head.appendChild(style);
+  }
 }
 
 // to request do f.GET(url, callback, reportcb, falldata, fallcb)
@@ -52,9 +59,15 @@ function Response(code, type, text) {
 }
 
 //let log = console.log; "plus"
-function log(subj) {
-  if (subj.msg) console.log(subj.msg.type+' '+subj.msg.code+': '+subj.msg.text);
-  else console.log(subj);
+function log(subj, func) {
+  if (typeof subj == 'function' && func === undefined) {
+    function log(subject) { subj(subject) }
+    return log;
+  }
+  if (subj === undefined) return log;
+  func = func || console.log;
+  if (subj.msg) func(subj.msg.type+' '+subj.msg.code+': '+subj.msg.text);
+  else          func(subj);
 }
 
 JSON.tryparse = str => {
