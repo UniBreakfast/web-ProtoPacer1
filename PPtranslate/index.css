@@ -1,0 +1,51 @@
+
+#header {
+  position: sticky; top: 0;
+  height: 140px;
+  display: grid;
+  grid-template-columns: 1fr 4fr 5fr 1fr;
+  grid-template-rows: 4fr 3fr 2fr;
+  grid-template-areas:
+    "h-marked-btns  h-search-pad  h-nav-pad   h-all-btns"
+    "h-marked-btns  h-search-pad  h-lang-pad  h-all-btns"
+    "h-marked-btns    h-labels    h-lang-pad  h-all-btns";
+background: orange;
+}
+
+#main {
+  height: 4000px;
+}
+
+body {
+  margin: 0;
+}
+
+#h-marked-btns {
+  grid-area: h-marked-btns;
+  background: red;
+}
+
+#h-search-pad {
+  grid-area: h-search-pad;
+  background: blue;
+}
+
+#h-nav-pad {
+  grid-area: h-nav-pad;
+  background: yellow;
+}
+
+#h-lang-pad {
+  grid-area: h-lang-pad;
+  background: green;
+}
+
+#h-labels {
+  grid-area: h-labels;
+  background: cyan;
+}
+
+#h-all-btns {
+  grid-area: h-all-btns;
+  background: teal;
+}
