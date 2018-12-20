@@ -1,51 +1,103 @@
 
+* { box-sizing: border-box }
+
+html, body { height: 100% }
+
+body, ul { margin: 0; padding: 0 }
+
+ul { list-style: none }
+
+textarea { resize: none }
+
 #header {
-  position: sticky; top: 0;
   height: 140px;
   display: grid;
+
+/*
   grid-template-columns: 1fr 4fr 5fr 1fr;
   grid-template-rows: 4fr 3fr 2fr;
   grid-template-areas:
-    "h-marked-btns  h-search-pad  h-nav-pad   h-all-btns"
-    "h-marked-btns  h-search-pad  h-lang-pad  h-all-btns"
-    "h-marked-btns    h-labels    h-lang-pad  h-all-btns";
+    "btns4marked  searchpad   nav   btns4all"
+    "btns4marked  searchpad  langs  btns4all"
+    "btns4marked    labels   langs  btns4all";
+*/
+
+  grid-template:  "btns4marked  searchpad   nav   btns4all"  4fr
+                  "btns4marked  searchpad  langs  btns4all"  3fr
+                  "btns4marked    labels   langs  btns4all"  2fr
+                  /     1fr         4fr     5fr     1fr        ;
+
 background: orange;
 }
 
-#main {
-  height: 4000px;
+#h-btns4marked {
+  grid-area: btns4marked;
+background: red;
 }
 
-body {
-  margin: 0;
+#h-searchpad {
+  grid-area: searchpad;
+background: blue;
 }
 
-#h-marked-btns {
-  grid-area: h-marked-btns;
-  background: red;
+#h-nav {
+  grid-area: nav;
+background: yellow;
 }
 
-#h-search-pad {
-  grid-area: h-search-pad;
-  background: blue;
-}
-
-#h-nav-pad {
-  grid-area: h-nav-pad;
-  background: yellow;
-}
-
-#h-lang-pad {
-  grid-area: h-lang-pad;
-  background: green;
+#h-langs {
+  grid-area: langs;
+background: green;
 }
 
 #h-labels {
-  grid-area: h-labels;
-  background: cyan;
+  grid-area: labels;
+background: cyan;
 }
 
-#h-all-btns {
-  grid-area: h-all-btns;
-  background: teal;
+#h-btns4all {
+  grid-area: btns4all;
+background: teal;
+}
+
+#main {
+  max-height: calc(100% - 140px);
+  overflow-y: auto;
+}
+
+#line-list {
+  overflow-y: auto;
+}
+
+.line-item {
+  display: grid;
+  height: 200px;
+  grid-template:  "lineattrs  lang1  linebtns  lang2"  1fr
+                   "linetags  lang1  linebtns  lang2"  1fr
+                   /  18fr     9fr     1fr      9fr      ;
+}
+
+.line-attrs {
+  grid-area: lineattrs;
+background: teal;
+}
+
+.line-tags {
+  grid-area: linetags;
+background: green;
+}
+
+.line-lang1 {
+  grid-area: lang1;
+background: yellow;
+}
+
+.line-lang2 {
+  grid-area: lang2;
+background: red;
+}
+
+.line-opers {
+  grid-area: linebtns;
+background: cyan;
 }
