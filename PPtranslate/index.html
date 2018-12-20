@@ -17,22 +17,90 @@
 </head>
 <body>
   <header id="header">
-    <div id="h-btns4marked"> </div>
-    <div id="h-searchpad">   </div>
-    <div id="h-nav">         </div>
-    <div id="h-langs">       </div>
-    <div id="h-labels">      </div>
-    <div id="h-btns4all">    </div>
+    <div id="h-btns4marked">
+      <button id="del">  bin </button>
+      <button id="dupl"> dup </button>
+    </div>
+    <div id="h-searchpad">
+      <button id="search-hide">  Hide  </button>
+      <button id="search">      Search </button>
+      <label> <input type=checkbox id="live-search"> live </label>
+    </div>
+    <div id="h-nav">
+      <button id="show-all"> Show All (456) </button>
+      <label> or by <input type=number id="show-num"> </label>
+      <button id="next">   Next   </button>
+      <button id="prev"> Previous </button>
+    </div>
+    <div id="h-langs">
+      <label> language 1
+        <select id='lang1'>
+          <option value="English" selected> English </option>
+          <option value="Russian"> Russian </option>
+        </select>
+      </label>
+      <label> language 2
+        <select id='lang2'>
+          <option value="English"> English </option>
+          <option value="Russian" selected> Russian </option>
+        </select>
+      </label>
+    </div>
+    <div id="h-labels">
+      <span>  id  </span>
+      <span> code </span>
+      <span> type </span>
+    </div>
+    <div id="h-btns4all">
+      <label> all <button id="revert-all"> rev </button> </label>
+    </div>
   </header>
 
   <section id=main>
     <ul id="line-list">
       <li class="line-item">
-        <div  class="line-attrs">          </div>
-        <div  class="line-tags">           </div>
+        <div class="line-attrs">
+          <input class="line-mark" type=checkbox>
+          <input class="line-id" type=number readonly>
+          <input class="line-code">
+          <select class='line-type'>
+            <option value="SUCCESS"> SUCCESS </option>
+            <option value="FAIL">     FAIL   </option>
+          </select>
+        </div>
+        <div class="line-tags">
+          <span class="tag"> tag1 <span class="remove"> x </span> </span>
+          <span class="tag"> tag2 <span class="remove"> x </span> </span>
+          <span class="tag"> tag3 <span class="remove"> x </span> </span>
+        </div>
         <textarea class="line-lang1"> </textarea>
+        <div class="line-opers">
+          <button id="line-revert"> rev </button>
+          <input class="line-save" type=checkbox>
+        </div>
         <textarea class="line-lang2"> </textarea>
-        <div  class="line-opers">          </div>
+      </li>
+      <li class="line-item">
+        <div class="line-attrs">
+          <input class="line-mark" type=checkbox>
+          <input class="line-id" type=number readonly>
+          <input class="line-code">
+          <select class='line-type'>
+            <option value="SUCCESS"> SUCCESS </option>
+            <option value="FAIL">     FAIL   </option>
+          </select>
+        </div>
+        <div class="line-tags">
+          <span class="tag"> tag1 <span class="remove"> x </span> </span>
+          <span class="tag"> tag2 <span class="remove"> x </span> </span>
+          <span class="tag"> tag3 <span class="remove"> x </span> </span>
+        </div>
+        <textarea class="line-lang1"> </textarea>
+        <div class="line-opers">
+          <button id="line-revert"> rev </button>
+          <input class="line-save" type=checkbox>
+        </div>
+        <textarea class="line-lang2"> </textarea>
       </li>
       <li class="line-item">
         <div  class="line-attrs">          </div>
@@ -57,6 +125,7 @@
       </li>
     </ul>
   </section>
+
 
 
 
