@@ -101,3 +101,8 @@ background: red;
   grid-area: linebtns;
 background: cyan;
 }
+
+input[type=checkbox]
+{
+  transform: scale(1.4);
+}
